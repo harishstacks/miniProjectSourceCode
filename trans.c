@@ -186,7 +186,7 @@ void newRecord(FILE *fPtr)
     { // create record
         // user enters last name, first name and balance
         printf("%s", "Enter lastname, firstname, balance\n? ");
-        scanf("%14s%9s%lf", client.lastName, client.firstName, &client.balance);
+        scanf(" %14s %9s %lf", client.lastName, client.firstName, &client.balance);
 
         client.acctNum = accountNum;
         // move file pointer to correct record in file
