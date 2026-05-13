@@ -1,0 +1,2 @@
+Acct  Last Name       First Name    Balance
+10    Smith           John          2500.00
