@@ -53,6 +53,10 @@ int main(int argc, char *argv[])
         case 4:
             deleteRecord(cfPtr);
             break;
+        // list records to console
+        case 6:
+            listRecords(cfPtr);
+            break;
         // display if user does not select valid choice
         default:
             puts("Incorrect choice");
@@ -212,3 +216,20 @@ unsigned int enterChoice(void)
     scanf("%u", &menuChoice); // receive choice from user
     return menuChoice;
 } // end function enterChoice
+// list all non-empty records to console
+void listRecords(FILE *fPtr)
+{
+    struct clientData client = {0, "", "", 0.0};
+
+    rewind(fPtr);
+    puts("Listing accounts:");
+    printf("%-6s%-16s%-11s%10s\n", "Acct", "Last Name", "First Name", "Balance");
+
+    while (fread(&client, sizeof(struct clientData), 1, fPtr) == 1)
+    {
+        if (client.acctNum != 0)
+        {
+            printf("%-6d%-16s%-11s%10.2f\n", client.acctNum, client.lastName, client.firstName, client.balance);
+        }
+    }
+}
