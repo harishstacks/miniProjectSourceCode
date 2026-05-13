@@ -130,8 +130,8 @@ void updateRecord(FILE *fPtr)
         printf("%-6d%-16s%-11s%10.2f\n", client.acctNum, client.lastName, client.firstName, client.balance);
 
         // move file pointer to correct record in file
-        // move back by 1 record length
-        fseek(fPtr, sizeof(struct clientData), SEEK_CUR);
+        // move back by 1 record length (we already read the record)
+        fseek(fPtr, -((long)sizeof(struct clientData)), SEEK_CUR);
         // write updated record over old record in file
         fwrite(&client, sizeof(struct clientData), 1, fPtr);
     } // end else
