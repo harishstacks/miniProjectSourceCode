@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
 void textFile(FILE *readPtr)
 {
     FILE *writePtr; // accounts.txt file pointer
-    int result;     // used to test whether fread read any bytes
     // create clientData with default information
     struct clientData client = {0, "", "", 0.0};
 
@@ -75,27 +74,23 @@ void textFile(FILE *readPtr)
     if ((writePtr = fopen("accounts.txt", "w")) == NULL)
     {
         puts("File could not be opened.");
-    } // end if
-    else
+        return;
+    }
+
+    rewind(readPtr); // sets pointer to beginning of file
+    fprintf(writePtr, "%-6s%-16s%-11s%10s\n", "Acct", "Last Name", "First Name", "Balance");
+
+    // copy all records from random-access file into text file
+    while (fread(&client, sizeof(struct clientData), 1, readPtr) == 1)
     {
-        rewind(readPtr); // sets pointer to beginning of file
-        fprintf(writePtr, "%-6s%-16s%-11s%10s\n", "Acct", "Last Name", "First Name", "Balance");
-
-        // copy all records from random-access file into text file
-        while (!feof(readPtr))
+        if (client.acctNum != 0)
         {
-            result = fread(&client, sizeof(struct clientData), 1, readPtr);
+            fprintf(writePtr, "%-6d%-16s%-11s%10.2f\n", client.acctNum, client.lastName, client.firstName,
+                    client.balance);
+        }
+    }
 
-            // write single record to text file
-            if (result != 0 && client.acctNum != 0)
-            {
-                fprintf(writePtr, "%-6d%-16s%-11s%10.2f\n", client.acctNum, client.lastName, client.firstName,
-                        client.balance);
-            } // end if
-        }     // end while
-
-        fclose(writePtr); // fclose closes the file
-    }                     // end else
+    fclose(writePtr); // fclose closes the file
 } // end function textFile
 
 // update balance in record
